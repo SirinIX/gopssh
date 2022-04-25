@@ -1,10 +1,11 @@
 package cmd
 
 import (
-	"fmt"
+	"gopssh/cmd/base64"
 	"gopssh/cmd/execute"
-	"gopssh/cmd/put"
 	"gopssh/cmd/ping"
+	"gopssh/cmd/put"
+	"gopssh/log"
 
 	"github.com/spf13/cobra"
 )
@@ -24,13 +25,9 @@ func init() {
 		ping.PingCmd,
 		execute.ExecuteCmd,
 		put.PutCmd,
+		base64.Base64Cmd,
 	)
-
-	// A flag can be 'persistent', meaning that this flag will be available to the command it's assigned to as well as every command under that command.
-	// For global flags, assign a flag as a persistent flag on the root.
-	loggerLevel := rootCmd.PersistentFlags().IntP("log-level", "v", 4, "the level of logger, debug 5, info 4, warn 3, error 2")
-	cobra.OnlyValidArgs(rootCmd, []string{"deploy"})
-	fmt.Println(loggerLevel)
+	log.InitLogger()
 }
 
 func Execute() {
