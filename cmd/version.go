@@ -7,15 +7,16 @@ import (
 )
 
 const (
-	version          = "0.0.1"
-	latestCommitDate = "2022-04-22 15:04:27"
+	version = "0.0.1"
+
+	latestCommitDate = "2022-04-25 13:04:41"
 )
 
 var versionCmd = &cobra.Command{
-	Use: "version",
-	Short: "Print the version and latest commit time of cmd-scaffold",
-	Example: "cmd-scaffold version",
+	Use:     "version",
+	Short:   "Print the version and latest commit time of gopssh",
+	Example: "  gopssh version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Printf("cmd-scaffold version %v\nlatest commit time %v", version, latestCommitDate)
+		fmt.Printf("gopssh version %v\nlatest commit time %v", version, latestCommitDate)
 	},
 }

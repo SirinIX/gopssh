@@ -26,8 +26,8 @@ func (l *CtxLogger) Info(format string, args ...interface{}) {
 	l.logger.Info(fmt.Sprintf(format, args...))
 }
 
-func (l *CtxLogger) Warn(format string, args ...interface{}) {
-	l.logger.Warn(fmt.Sprintf(format, args...))
+func (l *CtxLogger) Warning(format string, args ...interface{}) {
+	l.logger.Warning(fmt.Sprintf(format, args...))
 }
 
 func (l *CtxLogger) Error(format string, args ...interface{}) {

@@ -1,14 +1,14 @@
 package base64
 
 import (
-	"gopssh/log"
+	"fmt"
 	"gopssh/pkg/base64"
 
 	"github.com/spf13/cobra"
 )
 
 type option struct {
-	decode bool
+	decode  bool
 	content string
 }
 
@@ -16,9 +16,9 @@ var op = &option{}
 
 var Base64Cmd = &cobra.Command{
 	Use: "base64",
+	Short: "Encode or decode content with base64",
 	Example: `  Encode: gopssh base64 -c 'root$123'
   Decode: gopssh base64 -d -c 'cm9vdA=='`,
-	Short: "base64 encode or decode",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},
@@ -37,10 +37,10 @@ func execute(op *option) error {
 		if err != nil {
 			return err
 		}
-		log.Info("the base64 decoded result of %v is: %v", op.content, decStr)
+		fmt.Printf("the base64 decoded result of %v is: %v", op.content, decStr)
 	} else {
 		encStr := base64.Encode(op.content)
-		log.Info("the base64 encoded result of %v is: %v", op.content, encStr)
+		fmt.Printf("the base64 encoded result of %v is: %v", op.content, encStr)
 	}
 	return nil
 }

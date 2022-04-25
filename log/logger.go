@@ -26,8 +26,8 @@ func Info(format string, args ...interface{}) {
 	logrus.Info(fmt.Sprintf(format, args...))
 }
 
-func Warn(format string, args ...interface{}) {
-	logrus.Warn(fmt.Sprintf(format, args...))
+func Warning(format string, args ...interface{}) {
+	logrus.Warning(fmt.Sprintf(format, args...))
 }
 
 func Error(format string, args ...interface{}) {

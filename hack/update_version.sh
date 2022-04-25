@@ -14,7 +14,8 @@ readonly COMMAND_VERSION_FILE_PATH=${REPOSITORY_PATH}/cmd/version.go
 
 readonly SHELL_LOG_TIME_FORMAT="%Y-%m-%d %H:%m:%S"
 
-readonly GOLANG_COMMIT_TIME_VARIABLE_NAME="latestCommitDate"
+readonly GOLANG_COMMIT_TIME_CONSTANT_PREFIX="latestCommitDate = "
+readonly GOLANG_VERSION_CONSTANT_PREFIX="version = "
 
 # > Define variables
 current_branch=""
@@ -25,20 +26,38 @@ function info() {
   log_time=$(date +"${SHELL_LOG_TIME_FORMAT}")
   # GRAMMAR: \033[${COLOR};40m${TEXT}\033[0m
   # Color: Black 30, Red 31, Green 32, Brown 33, Blue 34, Purple 35, Cyan 36, White 37
-  echo -e "[${log_time}] [\033[32;49mINFO\033[0m] $*"
+  echo -e "\033[36;49mINFO\033[0m[${log_time}] $*"
 }
 
 function warning() {
   log_time=$(date +"${SHELL_LOG_TIME_FORMAT}")
-  echo -e "[${log_time}] [\033[33;49mWARNING\033[0m] $*"
+  echo -e "\033[33;49mWARN\033[0m[${log_time}] $*"
 }
 
 function error() {
   log_time=$(date +"${SHELL_LOG_TIME_FORMAT}")
-  echo -e "[${log_time}] [\033[31;49mERROR\033[0m] $*"
+  echo -e "\033[31;49mERRO\033[0m[${log_time}] $*"
 }
 
 # > Define main functions
+# DESC: Update file version.go constant version as input
+# ARGS: $1 (optional): Version
+# OUTS: None
+function update_version_in_version_command() {
+  if [ -z "$1" ]; then
+    info "no version input, do not update version"
+    return
+  fi
+  # Update version
+  sed -i "" "s/${GOLANG_VERSION_CONSTANT_PREFIX}\".*\"/${GOLANG_VERSION_CONSTANT_PREFIX}\"$1\"/g" "${COMMAND_VERSION_FILE_PATH}"
+  if [ $? -ne 0 ]; then
+    error "failed to update version"
+    return 1
+  fi
+
+  info "succeed to update version as $1 in file ${COMMAND_VERSION_FILE_PATH}"
+}
+
 # DESC: Update file version.go constant latestCommitDate as lastest git commit time of current branch
 # ARGS: None
 # OUTS: None
@@ -58,12 +77,17 @@ function update_git_commit_time_in_version_command() {
   fi
 
   # Update the latest commit time in version.go
-  readonly bak_suffix=".bak"
-  sed -i "${bak_suffix}" "s/${GOLANG_COMMIT_TIME_VARIABLE_NAME} = \".*\"/${GOLANG_COMMIT_TIME_VARIABLE_NAME} = \"${latest_git_commit_time}\"/g" "${COMMAND_VERSION_FILE_PATH}"
-  # Clean up backup file
-  rm -rf "${COMMAND_VERSION_FILE_PATH}"${bak_suffix}
+  # readonly bak_suffix=".bak"
+  # sed -i "${bak_suffix}" "s/${GOLANG_COMMIT_TIME_VARIABLE_NAME} = \".*\"/${GOLANG_COMMIT_TIME_VARIABLE_NAME} = \"${latest_git_commit_time}\"/g" "${COMMAND_VERSION_FILE_PATH}"
+  sed -i "" "s/${GOLANG_COMMIT_TIME_CONSTANT_PREFIX}\".*\"/${GOLANG_COMMIT_TIME_CONSTANT_PREFIX}\"${latest_git_commit_time}\"/g" "${COMMAND_VERSION_FILE_PATH}"
+  if [ $? -ne 0 ]; then
+    error "failed to update latest git commit time"
+    return 1
+  fi
+  # # Clean up backup file
+  # rm -rf "${COMMAND_VERSION_FILE_PATH}"${bak_suffix}
 
-  info "succeed to update variable ${GOLANG_COMMIT_TIME_VARIABLE_NAME} value as ${latest_git_commit_time} in file ${COMMAND_VERSION_FILE_PATH}"
+  info "succeed to update commit time value as ${latest_git_commit_time} in file ${COMMAND_VERSION_FILE_PATH}"
 }
 
 # shellcheck disable=SC2181
@@ -110,4 +134,9 @@ function is_git_base_dir_exist() {
 }
 
 # > Execute main function
-update_git_commit_time_in_version_command
+function main() {
+  update_git_commit_time_in_version_command
+  update_version_in_version_command "$1"
+}
+
+main "$@"
