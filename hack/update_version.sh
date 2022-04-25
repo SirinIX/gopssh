@@ -1,21 +1,18 @@
 #!/bin/bash
-# Path: hack/update_commit_time.sh
+# Path: hack/update_version.sh
 
 # > Define constants
 HACK_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 readonly HACK_PATH
 readonly REPOSITORY_PATH=${HACK_PATH}/..
-
 readonly GIT_BASE_PATH=${REPOSITORY_PATH}/.git
-readonly GIT_LOG_DIR=${GIT_BASE_PATH}/logs/refs/heads
-readonly GIT_COMMIT_TIME_FORMAT="+%Y-%m-%d %H:%m:%S"
-
-readonly COMMAND_VERSION_FILE_PATH=${REPOSITORY_PATH}/cmd/version.go
 
 readonly SHELL_LOG_TIME_FORMAT="%Y-%m-%d %H:%m:%S"
 
-readonly GOLANG_COMMIT_TIME_CONSTANT_PREFIX="latestCommitDate = "
+readonly COMMAND_VERSION_FILE_PATH=${REPOSITORY_PATH}/cmd/version.go
+
 readonly GOLANG_VERSION_CONSTANT_PREFIX="version = "
+readonly GOLANG_COMMIT_TIME_CONSTANT_PREFIX="latestCommitDate = "
 
 # > Define variables
 current_branch=""
@@ -43,6 +40,7 @@ function error() {
 # DESC: Update file version.go constant version as input
 # ARGS: $1 (optional): Version
 # OUTS: None
+# shellcheck disable=SC2181
 function update_version_in_version_command() {
   if [ -z "$1" ]; then
     info "no version input, do not update version"
@@ -98,7 +96,7 @@ function set_current_branch_latest_git_commit_time() {
     return 1
   fi
 
-  git_log_file_path="${GIT_LOG_DIR}/${current_branch}"
+  git_log_file_path="${GIT_BASE_PATH}/logs/refs/heads/${current_branch}"
   if [ ! -f "${git_log_file_path}" ]; then
     error "can not find git log file: ${git_log_file_path}"
     return 1
@@ -106,6 +104,7 @@ function set_current_branch_latest_git_commit_time() {
 
   raw_time=$(tail <"${git_log_file_path}" -1 | awk '{print $5}')
   # Set the latest git commit time
+  readonly GIT_COMMIT_TIME_FORMAT="+%Y-%m-%d %H:%m:%S"
   latest_git_commit_time="$(date -r "${raw_time}" "${GIT_COMMIT_TIME_FORMAT}")"
 
   info "branch ${current_branch} latest git commit time is ${latest_git_commit_time}"

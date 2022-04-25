@@ -15,15 +15,13 @@ global:
   labels: 
     # all: all
     app: my_host
-hosts:
+groups:
   # Execute command 'ls -l /' for mysql_master 
   #   gopssh execute -h mysql_master 'ls -l /'
   mysql_master:
-    # The 'hosts.<host_alias>.ip' is necessary
-    # Support range of host 
-    #   172.16.8.[82.83] equal 172.16.8.82, 172.16.8.83
-    #   172.16.[9.10].[80.89] equal 172.16.9.80~89, 172.16.10.80~89
-    ip: 172.16.8.[82.83]
+    # The 'hosts.<host_alias>.ips' is necessary
+    ips: 
+    - 172.16.8.83
     # Overwrite 'global.port' 23
     port: 30
     # * Overwrite 'global.username' root
@@ -45,7 +43,9 @@ hosts:
       # app: my_host
   # The sample without comment
   mysql_slaves:
-    ip: 172.16.8.84
+    ip: 
+    - 172.16.8.84
+    - 172.16.8.85
     port: 22
     username: mysql
     password: bXlzcWwkMTIz
@@ -54,7 +54,8 @@ hosts:
       mysql: slave
   # The sample with 'global'
   nginx:
-    ip: 172.16.8.87
+    ip: 
+    - 172.16.8.87
     # port: 23
     # username: root
     # password: cm9vdCQxMjM=
