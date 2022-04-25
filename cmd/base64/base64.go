@@ -7,10 +7,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var (
-	decode  bool
+type option struct {
+	decode bool
 	content string
-)
+}
+
+var op = &option{}
 
 var Base64Cmd = &cobra.Command{
 	Use: "base64",
@@ -18,27 +20,27 @@ var Base64Cmd = &cobra.Command{
   Decode: gopssh base64 -d -c 'cm9vdA=='`,
 	Short: "base64 encode or decode",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return execute(decode, content)
+		return execute(op)
 	},
 }
 
 func init() {
-	Base64Cmd.Flags().BoolVarP(&decode, "decode", "d", false, "decode or encode, default is encode")
-	Base64Cmd.Flags().StringVarP(&content, "content", "c", "", "decode / encode data content (required)")
+	Base64Cmd.Flags().BoolVarP(&op.decode, "decode", "d", false, "decode or encode, default is encode")
+	Base64Cmd.Flags().StringVarP(&op.content, "content", "c", "", "decode / encode data content (required)")
 
 	Base64Cmd.MarkFlagRequired("content")
 }
 
-func execute(decode bool, content string) error {
-	if decode {
-		decStr, err := base64.Decode(content)
+func execute(op *option) error {
+	if op.decode {
+		decStr, err := base64.Decode(op.content)
 		if err != nil {
 			return err
 		}
-		log.Info("the base64 decoded result of %v is: %v", content, decStr)
+		log.Info("the base64 decoded result of %v is: %v", op.content, decStr)
 	} else {
-		encStr := base64.Encode(content)
-		log.Info("the base64 encoded result of %v is: %v", content, encStr)
+		encStr := base64.Encode(op.content)
+		log.Info("the base64 encoded result of %v is: %v", op.content, encStr)
 	}
 	return nil
 }
