@@ -3,7 +3,7 @@ package mysql
 import (
 	"fmt"
 
-	"cmd-scaffold/log"
+	"gopssh/log"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -20,14 +20,15 @@ type MySQLConfig struct {
 func (c *MySQLConfig) NewMysqlConnection() (*sqlx.DB, error) {
 	addr := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&loc=Local&parseTime=true",
 		c.MysqlUsername, c.MysqlPassword, c.MysqlHost, c.MysqlPort, c.MysqlDatbase)
-	log.Info("connect to mysql: %s", addr)
 
 	// Connect to MySQL
 	db, err := sqlx.Connect("mysql", addr)
-	trycount := 0
 	if err != nil {
 		return nil, err
 	}
+	log.Info("connect to mysql: %s", addr)
+	
+	trycount := 0
 	for {
 		if trycount >= 3 {
 			break

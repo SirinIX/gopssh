@@ -1,7 +1,7 @@
 package http
 
 import (
-	"cmd-scaffold/log"
+	"gopssh/log"
 	"fmt"
 	"net/http"
 )

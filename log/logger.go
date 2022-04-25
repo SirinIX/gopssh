@@ -3,21 +3,33 @@ package log
 import (
 	"fmt"
 	"os"
-	"time"
+
+	"github.com/sirupsen/logrus"
 )
 
-const (
-	format = "2006-01-02 15:04:05"
-)
+func InitLogger() {
+	logrus.SetFormatter(&logrus.TextFormatter{
+		FullTimestamp:   true,
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+
+	logrus.SetOutput(os.Stdout)
+
+	logrus.SetLevel(logrus.InfoLevel)
+}
+
+func Debug(format string, args ...interface{}) {
+	logrus.Debug(fmt.Sprintf(format, args...))
+}
 
 func Info(format string, args ...interface{}) {
-	fmt.Fprintf(os.Stdout, timeLog()+format+"\n", args...)
+	logrus.Info(fmt.Sprintf(format, args...))
+}
+
+func Warn(format string, args ...interface{}) {
+	logrus.Warn(fmt.Sprintf(format, args...))
 }
 
 func Error(format string, args ...interface{}) {
-	fmt.Fprintf(os.Stderr, timeLog()+format+"\n", args...)
-}
-
-func timeLog() string {
-	return fmt.Sprintf("[%v] ", time.Now().Format(format))
+	logrus.Error(fmt.Sprintf(format, args...))
 }
