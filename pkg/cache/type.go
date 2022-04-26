@@ -12,9 +12,9 @@ const (
 )
 
 type Cache struct {
-	ConfigPath  string    `json:"config_path" yaml:"config_path"`
-	TimeVersion string    `json:"time_version" yaml:"time_version"`
-	Instances   Instances `json:"instances" yaml:"instances"`
+	ConfigPath string    `json:"config_path" yaml:"config_path"`
+	ModTime    int64     `json:"mod_time" yaml:"mod_time"`
+	Instances  Instances `json:"instances" yaml:"instances"`
 }
 
 type Instances []*Instance

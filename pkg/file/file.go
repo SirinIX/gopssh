@@ -1,6 +1,7 @@
 package file
 
 import (
+	"fmt"
 	"gopssh/log"
 	"os"
 	"os/user"
@@ -46,12 +47,24 @@ func IsPathExist(path string) bool {
 	return true
 }
 
+func IsPathExistE(path string) error {
+	if _, err := os.Stat(path); err != nil {
+		if os.IsNotExist(err) {
+			err := fmt.Errorf("config file not found")
+			log.Error("file %v is not exist, error: %v", path, err)
+			return err
+		}
+	}
+
+	return nil
+}
+
 func MustGetUserHome() string {
 	userHome := GetUserHome()
 	if userHome == "" {
 		return "./"
 	}
-	
+
 	return userHome
 }
 
@@ -78,4 +91,25 @@ func EnsureDirExist(path string) error {
 	}
 
 	return nil
+}
+
+func MustGetFileModTime(path string) int64 {
+	stat, _ := os.Stat(path)
+
+	return stat.ModTime().Unix()
+}
+
+func GetFileModTime(path string) (int64, error) {
+	stat, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			log.Error("file %s not found, error: %v", path, err)
+			return 0, err
+		}
+
+		log.Error("failed to get file %s status, error: %v", path, err)
+		return 0, err
+	}
+
+	return stat.ModTime().Unix(), nil
 }

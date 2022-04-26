@@ -1,6 +1,8 @@
 package config
 
 import (
+	"gopssh/log"
+	"gopssh/pkg/cache"
 	"gopssh/pkg/file"
 	"path/filepath"
 )
@@ -55,4 +57,46 @@ func GetDefaultConfigFilePath() string {
 
 func IsDefaultConfigFileExist() bool {
 	return file.IsPathExist(GetDefaultConfigFilePath())
+}
+
+func ConfigFileToInstances(path string) (cache.Instances, error) {
+	// Check file
+	cfgPath := path
+	if path == "" {
+		defaultCfgPath := GetDefaultConfigFilePath()
+		if err := file.IsPathExistE(defaultCfgPath); err != nil {
+			return nil, err
+		}
+		cfgPath = defaultCfgPath
+	}
+	if err := file.IsPathExistE(cfgPath); err != nil {
+		return nil, err
+	}
+
+	// Use cache, if cache file exist
+	if cachePath, exist := cache.IsCacheFileExist(cfgPath); exist {
+		ch, err := cache.UnmarshalCache(cachePath)
+		if err != nil {
+			return nil, err
+		}
+		if !ch.IsConfigFileChanges() {
+			log.Info("use cache file %s", cachePath)
+			return ch.Instances, nil
+		}
+	}
+
+	// Use config directly
+	cfg, err := UnmarshalConfig(cfgPath)
+	if err != nil {
+		return nil, err
+	}
+	instances, err := cfg.ToInstances()
+	if err != nil {
+		return nil, err
+	}
+
+	// Save cache
+	SaveNewCache(cfgPath, instances)
+
+	return instances, nil
 }

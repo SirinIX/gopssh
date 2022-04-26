@@ -8,6 +8,16 @@ import (
 	"testing"
 )
 
+func TestFileStat(t *testing.T) {
+	path := "/Users/tokienohara/Documents/Project/gopssh/README.md"
+	stat, _ := os.Stat(path)
+
+	modtime := stat.ModTime().Unix()
+	fmt.Println(modtime) // 1650866833, 1650961232
+}
+
+
+
 func TestFilePath(t *testing.T) {
 	a := filepath.Join("/", "a", "b", filepath.Base("/c1/c2/c3"))
 

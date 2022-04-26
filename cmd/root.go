@@ -23,6 +23,8 @@ var rootCmd = &cobra.Command{
 func init() {
 	log.InitLogger()
 
+	// rootCmd.PersistentFlags().StringP("config-file", "f", config.GetDefaultConfigFilePath(), "config file path")
+
 	rootCmd.AddCommand(
 		versionCmd,
 		check.CheckCmd,

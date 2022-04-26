@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"gopssh/log"
-	"gopssh/pkg/config"
+	"gopssh/pkg/cache"
 )
 
 const (
@@ -13,7 +13,7 @@ const (
 	timeout  = 5
 )
 
-func CheckPort(address *config.Address) bool {
+func CheckPort(address *cache.Address) bool {
 	addrStr := address.String()
 
 	_, err := net.DialTimeout(protocol, addrStr, timeout * time.Second)
