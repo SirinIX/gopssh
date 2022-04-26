@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"gopssh/cmd/base64"
+	"gopssh/cmd/check"
 	"gopssh/cmd/execute"
-	"gopssh/cmd/ping"
 	"gopssh/cmd/put"
+	"gopssh/cmd/template"
 	"gopssh/log"
 
 	"github.com/spf13/cobra"
@@ -22,14 +23,13 @@ var rootCmd = &cobra.Command{
 func init() {
 	log.InitLogger()
 
-	
-
 	rootCmd.AddCommand(
 		versionCmd,
-		ping.PingCmd,
+		check.CheckCmd,
 		execute.ExecuteCmd,
 		put.PutCmd,
 		base64.Base64Cmd,
+		template.TemplateCmd,
 	)
 }
 

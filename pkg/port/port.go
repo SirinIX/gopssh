@@ -1,4 +1,4 @@
-package ping
+package port
 
 import (
 	"net"
@@ -13,7 +13,7 @@ const (
 	timeout  = 5
 )
 
-func Ping(address *config.Address) bool {
+func CheckPort(address *config.Address) bool {
 	addrStr := address.String()
 
 	_, err := net.DialTimeout(protocol, addrStr, timeout * time.Second)

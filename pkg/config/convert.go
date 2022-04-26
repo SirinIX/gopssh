@@ -68,11 +68,11 @@ func (c *Config) ToYAML() (string, error) {
 }
 
 func (c *Config) ToJSON() (string, error) {
-	b, err := json.Marshal(c)
+	b, err := json.MarshalIndent(c, "", "  ")
 	if err != nil {
 		log.Error("failed to marshal config to json, error: %s", err)
 		return "", err
 	}
 
-	return string(b), nil
+	return string(b)+"\n", nil
 }

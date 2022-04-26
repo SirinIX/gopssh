@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"gopssh/log"
 	"gopssh/pkg/base64"
+	"gopssh/pkg/cache"
 	pkgIp "gopssh/pkg/ip"
 )
 
-func (c *Config) ToInstances() ([]*Instance, error) {
+func (c *Config) ToInstances() (cache.Instances, error) {
 	var err error
-	var instances []*Instance
+	var instances cache.Instances
 
 	for _, group := range c.Groups {
 		group.CombineGlobalSetting(c.Global)
@@ -27,8 +28,8 @@ func (c *Config) ToInstances() ([]*Instance, error) {
 				return nil, err
 			}
 
-			inst := &Instance{
-				Address: &Address{
+			inst := &cache.Instance{
+				Address: &cache.Address{
 					Ip:   ip,
 					Port: group.Port,
 				},
