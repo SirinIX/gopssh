@@ -16,11 +16,8 @@ global:
     # all: all
     app: my_host
 groups:
-  # Execute command 'ls -l /' for mysql_master 
-  #   gopssh execute -h mysql_master 'ls -l /'
-  mysql_master:
-    # The 'hosts.<host_alias>.ips' is necessary
-    ips: 
+  # The 'groups..ips' is necessary
+  - ips: 
     - 172.16.8.83
     # Overwrite 'global.port' 23
     port: 30
@@ -42,8 +39,7 @@ groups:
       mysql: master
       # app: my_host
   # The sample without comment
-  mysql_slaves:
-    ip: 
+  - ips: 
     - 172.16.8.84
     - 172.16.8.85
     port: 22
@@ -53,8 +49,7 @@ groups:
       app: mysql
       mysql: slave
   # The sample with 'global'
-  nginx:
-    ip: 
+  - ips: 
     - 172.16.8.87
     # port: 23
     # username: root

@@ -1,13 +1,11 @@
 groups:
-  mysql_master:
-    ips: 
+  - ips: 
     - 172.16.8.83
     # username: root
     password: cm9vdCQxMjM= # echo -n 'root$123' | base64
     # labels:
     #   all: all
- mysql_slaves:
-    ips: 
+  - ips: 
     - 172.16.8.84
     - 172.16.8.85
     - 172.16.8.86

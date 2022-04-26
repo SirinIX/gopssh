@@ -20,6 +20,10 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
+	log.InitLogger()
+
+	
+
 	rootCmd.AddCommand(
 		versionCmd,
 		ping.PingCmd,
@@ -27,7 +31,6 @@ func init() {
 		put.PutCmd,
 		base64.Base64Cmd,
 	)
-	log.InitLogger()
 }
 
 func Execute() {
