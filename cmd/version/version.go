@@ -1,4 +1,4 @@
-package cmd
+package version
 
 import (
 	"fmt"
@@ -9,10 +9,10 @@ import (
 const (
 	version = "0.0.1"
 
-	latestCommitDate = "2022-04-25 15:04:12"
+	latestCommitDate = "2022-04-26 16:04:54"
 )
 
-var versionCmd = &cobra.Command{
+var VersionCmd = &cobra.Command{
 	Use:     "version",
 	Short:   "Print the version and latest commit time of gopssh",
 	Example: "  gopssh version",

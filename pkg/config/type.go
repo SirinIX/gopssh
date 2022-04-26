@@ -80,7 +80,7 @@ func ConfigFileToInstances(path string) (cache.Instances, error) {
 			return nil, err
 		}
 		if !ch.IsConfigFileChanges() {
-			log.Info("use cache file %s", cachePath)
+			log.Debug("use cache file %s", cachePath)
 			return ch.Instances, nil
 		}
 	}

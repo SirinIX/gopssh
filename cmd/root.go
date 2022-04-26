@@ -6,6 +6,7 @@ import (
 	"gopssh/cmd/execute"
 	"gopssh/cmd/put"
 	"gopssh/cmd/template"
+	"gopssh/cmd/version"
 	"gopssh/log"
 
 	"github.com/spf13/cobra"
@@ -26,12 +27,12 @@ func init() {
 	// rootCmd.PersistentFlags().StringP("config-file", "f", config.GetDefaultConfigFilePath(), "config file path")
 
 	rootCmd.AddCommand(
-		versionCmd,
+		base64.Base64Cmd,
 		check.CheckCmd,
 		execute.ExecuteCmd,
 		put.PutCmd,
-		base64.Base64Cmd,
 		template.TemplateCmd,
+		version.VersionCmd,
 	)
 }
 
