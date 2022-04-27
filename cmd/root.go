@@ -3,6 +3,7 @@ package cmd
 import (
 	"gopssh/cmd/base64"
 	"gopssh/cmd/check"
+	"gopssh/cmd/convert"
 	"gopssh/cmd/execute"
 	"gopssh/cmd/put"
 	"gopssh/cmd/template"
@@ -29,6 +30,7 @@ func init() {
 	rootCmd.AddCommand(
 		base64.Base64Cmd,
 		check.CheckCmd,
+		convert.ConvertCmd,
 		execute.ExecuteCmd,
 		put.PutCmd,
 		template.TemplateCmd,

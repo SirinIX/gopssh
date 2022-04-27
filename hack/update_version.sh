@@ -9,7 +9,7 @@ readonly GIT_BASE_PATH=${REPOSITORY_PATH}/.git
 
 readonly SHELL_LOG_TIME_FORMAT="%Y-%m-%d %H:%m:%S"
 
-readonly COMMAND_VERSION_FILE_PATH=${REPOSITORY_PATH}/cmd/version.go
+readonly COMMAND_VERSION_FILE_PATH=${REPOSITORY_PATH}/cmd/version/version.go
 
 readonly GOLANG_VERSION_CONSTANT_PREFIX="version = "
 readonly GOLANG_COMMIT_TIME_CONSTANT_PREFIX="latestCommitDate = "
@@ -85,7 +85,7 @@ function update_git_commit_time_in_version_command() {
   # # Clean up backup file
   # rm -rf "${COMMAND_VERSION_FILE_PATH}"${bak_suffix}
 
-  info "succeed to update commit time value as ${latest_git_commit_time} in file ${COMMAND_VERSION_FILE_PATH}"
+  info "succeed to update commit time as ${latest_git_commit_time} in file ${COMMAND_VERSION_FILE_PATH}"
 }
 
 # shellcheck disable=SC2181

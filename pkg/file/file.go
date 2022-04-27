@@ -37,6 +37,23 @@ func SaveStringAsFile(path string, content string) error {
 	return nil
 }
 
+func SaveBytesAsFile(path string, content []byte) error {
+	f, err := os.Create(path)
+	if err != nil {
+		log.Error("failed to create file %s, error: %v", path, err)
+		return err
+	}
+	defer f.Close()
+
+	_, err = f.Write(content)
+	if err != nil {
+		log.Error("failed to write string to file %s, error: %v", path, err)
+		return err
+	}
+
+	return nil
+}
+
 func IsPathExist(path string) bool {
 	if _, err := os.Stat(path); err != nil {
 		if os.IsNotExist(err) {

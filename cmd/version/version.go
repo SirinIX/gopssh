@@ -9,7 +9,7 @@ import (
 const (
 	version = "0.0.1"
 
-	latestCommitDate = "2022-04-26 16:04:54"
+	latestCommitDate = "2022-04-26 19:04:34"
 )
 
 var VersionCmd = &cobra.Command{

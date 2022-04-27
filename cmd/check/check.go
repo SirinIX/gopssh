@@ -22,7 +22,7 @@ var CheckCmd = &cobra.Command{
 }
 
 func init() {
-	CheckCmd.PersistentFlags().StringVarP(&op.configFile, "config-file", "f", "", "config file path")
+	CheckCmd.Flags().StringVarP(&op.configFile, "config-file", "f", "", "config file path")
 }
 
 func execute(op *option) error {

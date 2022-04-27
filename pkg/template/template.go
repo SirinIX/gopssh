@@ -1,15 +1,4 @@
-package config
-
-import (
-	"fmt"
-	"gopssh/log"
-	"gopssh/pkg/file"
-)
-
-const (
-	defaultYAMLConfigTemplatePath = "./template.yaml"
-	defaultJSONConfigTemplatePath = "./template.json"
-)
+package template
 
 const (
 	defaultYAMLConfigTemplate = `global:
@@ -36,8 +25,8 @@ const (
     # password: cm9vdAo=
     labels:
       mysql: slave
-      # all: all
-`
+      # all: all`
+      
 	defaultJSONConfigTemplate = `{
   "global": {
     "port": 22,
@@ -70,33 +59,13 @@ const (
       }
     }
   ]
-}
-`
+}`
 )
 
-func DumpConfigTemplate(t string) error {
-	var cfgStr string
-	var filePath string
+func GetYAMLConfigTemplate() string {
+	return defaultYAMLConfigTemplate
+}
 
-	// Convert
-	if t == "yaml" {
-		cfgStr = defaultYAMLConfigTemplate
-		filePath = defaultYAMLConfigTemplatePath
-	} else if t == "json" {
-		cfgStr = defaultJSONConfigTemplate
-		filePath = defaultJSONConfigTemplatePath
-	} else {
-		err := fmt.Errorf("only support yaml or json")
-		log.Error("unknown config template type %v, error: %v", t, err)
-		return err
-	}
-	fmt.Printf("The config template is:\n\n%v\n", cfgStr)
-
-	// Save
-	if err := file.SaveStringAsFile(filePath, cfgStr); err != nil {
-		return err
-	}
-	fmt.Printf("Successfully saved the config template to %v\n", filePath)
-
-	return nil
+func GetJSONConfigTemplate() string {
+	return defaultJSONConfigTemplate
 }
