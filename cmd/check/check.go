@@ -1,6 +1,8 @@
 package check
 
 import (
+	"fmt"
+	"gopssh/log"
 	"gopssh/pkg/config"
 	"gopssh/pkg/port"
 
@@ -15,7 +17,8 @@ var op = &option{}
 
 var CheckCmd = &cobra.Command{
 	Use:     "check",
-	Example: "",
+	Short:   "Check all IP ports in the configuration file for connectivity",
+	Example: "  gopssh check -f config.yaml",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},
@@ -31,9 +34,20 @@ func execute(op *option) error {
 		return err
 	}
 
+	cantConnected := []string{}
+	connected := []string{}
 	for _, inst := range instances {
-		port.CheckPort(inst.Address)
+		if !port.CheckPort(inst.Address) {
+			cantConnected = append(cantConnected, inst.Address.String())
+			log.Warning("failed  to connect %s", inst.Address.String())
+		} else {
+			connected = append(connected, inst.Address.String())
+			log.Info("succeed to connect %s", inst.Address.String())
+		}
 	}
+	
+	fmt.Printf("\nSuccess %d IPs: %v\n", len(connected), connected)
+	fmt.Printf("Fail %d IPs: %v\n", len(cantConnected), cantConnected)
 
 	return nil
 }
