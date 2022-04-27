@@ -23,7 +23,7 @@ var ConvertCmd = &cobra.Command{
 	Example: `  YAML to JSON: gopssh convert -y sample.yaml
                 gopssh convert -y sample.yaml -o convert.json
   JSON to YAML: gopssh convert -j sample.json
-                gopssh convert -y sample.yaml -o convert.yaml`,
+                gopssh convert -j sample.yaml -o convert.yaml`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},
