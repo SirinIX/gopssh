@@ -7,23 +7,39 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func UnmarshalCache(path string) (*Cache, error) {
+func UnmarshalInstances(path string) (Instances, error) {
 	f, err := file.OpenFile(path)
 	if err != nil {
 		return nil, err
 	}
 
 	// Unmarshal
-	conf := &Cache{}
-	if err := yaml.NewDecoder(f).Decode(conf); err != nil {
+	instances := &Instances{}
+	if err := yaml.NewDecoder(f).Decode(instances); err != nil {
 		log.Error("failed to decode yaml file %v, error: %s", f.Name(), err)
 		return nil, err
 	}
 
-	return conf, nil
+	return *instances, nil
 }
 
-func (c *Cache) ToYAML() (string, error) {
+func UnmarshalCacheIndex(path string) (*CacheIndex, error) {
+	f, err := file.OpenFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unmarshal
+	index := &CacheIndex{}
+	if err := yaml.NewDecoder(f).Decode(index); err != nil {
+		log.Error("failed to decode yaml file %v, error: %s", f.Name(), err)
+		return nil, err
+	}
+
+	return index, nil
+}
+
+func (c CacheIndex) ToYAML() (string, error) {
 	b, err := yaml.Marshal(c)
 	if err != nil {
 		log.Error("failed to marshal Cache to yaml, error: %s", err)
@@ -31,4 +47,34 @@ func (c *Cache) ToYAML() (string, error) {
 	}
 
 	return string(b), nil
+}
+
+func (c CacheIndex) ToYAMLBytes() ([]byte, error) {
+	b, err := yaml.Marshal(c)
+	if err != nil {
+		log.Error("failed to marshal Cache to yaml, error: %s", err)
+		return nil, err
+	}
+
+	return b, nil
+}
+
+func (i Instances) ToYAML() (string, error) {
+	b, err := yaml.Marshal(i)
+	if err != nil {
+		log.Error("failed to marshal Instances to yaml, error: %s", err)
+		return "", err
+	}
+
+	return string(b), nil
+}
+
+func (i Instances) ToYAMLBytes() ([]byte, error) {
+	b, err := yaml.Marshal(i)
+	if err != nil {
+		log.Error("failed to marshal Instances to yaml, error: %s", err)
+		return nil, err
+	}
+
+	return b, nil
 }

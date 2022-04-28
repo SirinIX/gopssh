@@ -1,10 +1,10 @@
 package config
 
 import (
-	"gopssh/log"
+	"path/filepath"
+	
 	"gopssh/pkg/cache"
 	"gopssh/pkg/file"
-	"path/filepath"
 )
 
 const (
@@ -73,16 +73,10 @@ func ConfigFileToInstances(path string) (cache.Instances, error) {
 		return nil, err
 	}
 
-	// Use cache, if cache file exist
-	if cachePath, exist := cache.IsCacheFileExist(cfgPath); exist {
-		ch, err := cache.UnmarshalCache(cachePath)
-		if err != nil {
-			return nil, err
-		}
-		if !ch.IsConfigFileChanges() {
-			log.Debug("use cache file %s", cachePath)
-			return ch.Instances, nil
-		}
+	// Use cache
+	cacheInstances := cache.GetInstancesByConfigPath(cfgPath)
+	if cacheInstances != nil {
+		return cacheInstances, nil
 	}
 
 	// Use config directly

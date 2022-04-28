@@ -6,11 +6,16 @@ import (
 )
 
 func SaveNewCache(configPath string, instances cache.Instances) error {
-	cache := &cache.Cache{
+	ch := &cache.Cache{
+		InstancesPath:  cache.GenerateCacheFilePathByConfig(configPath),
 		ConfigPath: configPath,
 		ModTime:    file.MustGetFileModTime(configPath),
 		Instances:  instances,
 	}
 
-	return cache.Save()
+	if err := cache.CreateOrUpdateCacheIndex(ch); err != nil {
+		return err
+	}
+
+	return ch.Instances.Save(ch.InstancesPath)
 }

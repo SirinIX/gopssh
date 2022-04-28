@@ -2,23 +2,19 @@ package config
 
 import (
 	"fmt"
+
 	"gopssh/log"
-	"gopssh/pkg/base64"
 	"gopssh/pkg/cache"
 	pkgIp "gopssh/pkg/ip"
+	"gopssh/pkg/ssh"
 )
 
 func (c *Config) ToInstances() (cache.Instances, error) {
-	var err error
+	// var err error
 	var instances cache.Instances
 
 	for _, group := range c.Groups {
 		group.CombineGlobalSetting(c.Global)
-		// Decode password
-		group.Password, err = base64.Decode(group.Password)
-		if err != nil {
-			return nil, err
-		}
 		// Build instance
 		for _, ip := range group.Ips {
 			// Check ip
@@ -29,13 +25,15 @@ func (c *Config) ToInstances() (cache.Instances, error) {
 			}
 
 			inst := &cache.Instance{
-				Address: &cache.Address{
-					Ip:   ip,
-					Port: group.Port,
+				SSH: &ssh.SSH{
+					Address: &ssh.Address{
+						Ip:   ip,
+						Port: group.Port,
+					},
+					Username: group.Username,
+					Password: group.Password,
 				},
-				Username: group.Username,
-				Password: group.Password,
-				Labels:   group.Labels,
+				Labels: group.Labels,
 			}
 			instances = append(instances, inst)
 		}

@@ -37,12 +37,12 @@ func execute(op *option) error {
 	cantConnected := []string{}
 	connected := []string{}
 	for _, inst := range instances {
-		if !port.CheckPort(inst.Address) {
-			cantConnected = append(cantConnected, inst.Address.String())
-			log.Warning("failed  to connect %s", inst.Address.String())
+		if !port.CheckPort(inst.SSH.Address) {
+			cantConnected = append(cantConnected, inst.SSH.Address.String())
+			log.Warning("failed  to connect %s", inst.SSH.Address.String())
 		} else {
-			connected = append(connected, inst.Address.String())
-			log.Info("succeed to connect %s", inst.Address.String())
+			connected = append(connected, inst.SSH.Address.String())
+			log.Info("succeed to connect %s", inst.SSH.Address.String())
 		}
 	}
 	
