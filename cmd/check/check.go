@@ -4,14 +4,16 @@ import (
 	"fmt"
 	"gopssh/log"
 	"gopssh/pkg/config"
+	"gopssh/pkg/label"
 	"gopssh/pkg/port"
 
 	"github.com/spf13/cobra"
 )
 
 type option struct {
-	configFile string
-	labels     *[]string
+	configFile   string
+	labels       string
+	withoutCache bool
 }
 
 var op = &option{}
@@ -27,13 +29,17 @@ var CheckCmd = &cobra.Command{
 
 func init() {
 	CheckCmd.Flags().StringVarP(&op.configFile, "config-file", "f", "", "config file path")
-	// https://github.com/kubernetes/kubernetes/blob/ea07644522/staging/src/k8s.io/kubectl/pkg/cmd/label/label.go
-	// cmd.Flags().StringVarP(&o.selector, "selector", "l", o.selector, "Selector (label query) to filter on, not including uninitialized ones, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2).")
-	op.labels = CheckCmd.Flags().StringArrayP("labels", "l", []string{"all=all"}, "host labels")
+	CheckCmd.Flags().BoolVarP(&op.withoutCache, "without-cache", "n", false, "not use cache, default use cache")
+	// Default select all, equal l == ""
+	CheckCmd.Flags().StringVarP(&op.labels, "labels", "l", "", "label to filter on, supports '=', and '!=' (e.g. -l key1=value1,key2!=value2")
 }
 
 func execute(op *option) error {
-	instances, err := config.ConfigFileToInstances(op.configFile)
+	instances, err := config.ConfigFileToInstances(op.configFile, op.withoutCache)
+	if err != nil {
+		return err
+	}
+	instances, err = label.SelectInstances(op.labels, instances)
 	if err != nil {
 		return err
 	}

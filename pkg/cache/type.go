@@ -93,3 +93,13 @@ func GenerateCacheFileNameByConfig(configPath string) string {
 	// Sample: cache_j9sxt_cfgName.yaml
 	return fmt.Sprintf("%s_%s_%s.yaml", cacheFilePrefix, cfgName[:len(cfgName)-5], rand.String(randStringLength))
 }
+
+func (i *Instance) HasLabels(labels map[string]string) bool {
+	for k, v := range labels {
+		if i.Labels[k] != v {
+			return false
+		}
+	}
+
+	return true
+}

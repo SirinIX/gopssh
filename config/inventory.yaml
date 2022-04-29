@@ -9,12 +9,6 @@ global:
   # The 'global.password' have not default value, 
   #   please set 'global.password' or set 'password' for each host
   password: cm9vdCQxMjM=
-  # The 'global.labels' will add for all hosts
-  # All host always have label all=all,
-  #   and you can override all=all by setting 'global.labels'
-  labels: 
-    # all: all
-    app: my_host
 groups:
   # The 'groups..ips' is necessary
   - ips: 
@@ -37,7 +31,6 @@ groups:
       #   gopssh execute -l app=mysql 'ls -l /'
       app: mysql
       mysql: master
-      # app: my_host
   # The sample without comment
   - ips: 
     - 172.16.8.84
@@ -54,5 +47,3 @@ groups:
     # port: 23
     # username: root
     # password: cm9vdCQxMjM=
-    # labels:
-    #   all: all

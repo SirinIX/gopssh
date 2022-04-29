@@ -52,12 +52,4 @@ func (g *Group) CombineGlobalSetting(global *Global) {
 	if g.Password == "" {
 		g.Password = global.Password
 	}
-
-	if g.Labels == nil {
-		g.Labels = global.Labels
-	} else {
-		for k, v := range global.Labels {
-			g.Labels[k] = v
-		}
-	}
 }

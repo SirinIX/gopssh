@@ -22,7 +22,7 @@ type Global struct {
 	Port     int               `json:"port" yaml:"port"`
 	Username string            `json:"username" yaml:"username"`
 	Password string            `json:"password" yaml:"password"`
-	Labels   map[string]string `json:"labels" yaml:"labels"`
+	// Labels   map[string]string `json:"labels" yaml:"labels"`
 }
 
 type Groups []*Group
@@ -39,9 +39,6 @@ func NewGlobal() *Global {
 	return &Global{
 		Port:     22,
 		Username: "root",
-		Labels: map[string]string{
-			"all": "all",
-		},
 	}
 }
 
@@ -59,7 +56,7 @@ func IsDefaultConfigFileExist() bool {
 	return file.IsPathExist(GetDefaultConfigFilePath())
 }
 
-func ConfigFileToInstances(path string) (cache.Instances, error) {
+func ConfigFileToInstances(path string, withoutCache bool) (cache.Instances, error) {
 	// Check file
 	cfgPath := path
 	if path == "" {
@@ -74,9 +71,11 @@ func ConfigFileToInstances(path string) (cache.Instances, error) {
 	}
 
 	// Use cache
-	cacheInstances := cache.GetInstancesByConfigPath(cfgPath)
-	if cacheInstances != nil {
-		return cacheInstances, nil
+	if !withoutCache {
+		cacheInstances := cache.GetInstancesByConfigPath(cfgPath)
+		if cacheInstances != nil {
+			return cacheInstances, nil
+		}
 	}
 
 	// Use config directly
