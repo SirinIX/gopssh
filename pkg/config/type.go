@@ -88,7 +88,7 @@ func ConfigFileToInstances(path string, withoutCache bool) (cache.Instances, err
 		return nil, err
 	}
 
-	// Save cache
+	// Ignore cache error
 	SaveNewCache(cfgPath, instances)
 
 	return instances, nil

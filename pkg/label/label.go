@@ -2,6 +2,7 @@ package label
 
 import (
 	"fmt"
+	"gopssh/log"
 	"gopssh/pkg/cache"
 	"strings"
 )
@@ -25,8 +26,13 @@ func SelectInstances(labels string, instaces cache.Instances) (cache.Instances, 
 	if err != nil {
 		return nil, err
 	}
+
+	selected := labelSelector.SelectInstances(instaces)
+	if len(selected) == 0 {
+		log.Warning("no instance selected by label %v", labels)
+	}
 	
-	return labelSelector.SelectInstances(instaces), nil
+	return selected, nil
 }
 
 func NewLabelSelector(raw string) (*LabelSelector, error) {
