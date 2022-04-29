@@ -2,14 +2,15 @@ package ssh
 
 import (
 	"fmt"
+	"gopssh/log"
 	"strings"
 )
 
 type SSH struct {
-	Address  *Address `json:"address" yaml:"address"`
-	Username string   `json:"username" yaml:"username"`
-	Password string   `json:"password" yaml:"password"`
-	// Logger   *log.CtxLogger `json:"-" yaml:"-"`
+	Address  *Address       `json:"address" yaml:"address"`
+	Username string         `json:"username" yaml:"username"`
+	Password string         `json:"password" yaml:"password"`
+	Logger   *log.CtxLogger `json:"-" yaml:"-"`
 }
 
 type Address struct {

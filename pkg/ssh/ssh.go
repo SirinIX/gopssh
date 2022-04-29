@@ -1,7 +1,6 @@
 package ssh
 
 import (
-	"gopssh/log"
 	"gopssh/pkg/base64"
 	"time"
 
@@ -22,7 +21,7 @@ func (s *SSH) NewSSHSession() (*ssh.Session, error) {
 
 	session, err := cli.NewSession()
 	if err != nil {
-		log.Error("failed to new session, error: %v", err)
+		s.Logger.Error("failed to new session, error: %v", err)
 		return nil, err
 	}
 
@@ -33,7 +32,7 @@ func (s *SSH) NewSSHSession() (*ssh.Session, error) {
 	}
 
 	if err := session.RequestPty("xterm", 80, 40, modes); err != nil {
-		log.Error("failed to request pty xterm, error: %v", err)
+		s.Logger.Error("failed to request pty xterm, error: %v", err)
 		return nil, err
 	}
 
@@ -56,7 +55,7 @@ func (s *SSH) NewSSHClient() (*ssh.Client, error) {
 
 	sshCli, err := ssh.Dial(protocol, s.Address.String(), sshCfg)
 	if err != nil {
-		log.Error("failed to connect, error: %s", err)
+		s.Logger.Error("failed to connect, error: %s", err)
 		return nil, err
 	}
 

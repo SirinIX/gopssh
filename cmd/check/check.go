@@ -21,7 +21,11 @@ var op = &option{}
 var CheckCmd = &cobra.Command{
 	Use:     "check",
 	Short:   "Check all IP ports in the configuration file for connectivity",
-	Example: "  gopssh check -f config.yaml",
+	Example: `  Simple:               gopssh check
+  Specify config:       gopssh check -f config.yaml
+  Select host to check: gopssh check -l app=mysql
+  Check without cache:  gopssh check -f config.yaml -n
+`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},

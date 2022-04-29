@@ -2,7 +2,6 @@ package ssh
 
 import (
 	"bufio"
-	"gopssh/log"
 	"io"
 	"io/ioutil"
 )
@@ -17,16 +16,16 @@ func (s *SSH) Command(cmd string) (*SSHResult, error) {
 	// Run the command
 	stdout, err := session.StdoutPipe()
 	if err != nil {
-		log.Error("failed to get stdout pipe, error: %v", err)
+		s.Logger.Error("failed to get stdout pipe, error: %v", err)
 		return nil, err
 	}
 	stderr, err := session.StderrPipe()
 	if err != nil {
-		log.Error("failed to get stderr pipe, error: %v", err)
+		s.Logger.Error("failed to get stderr pipe, error: %v", err)
 		return nil, err
 	}
 	if err := session.Start(cmd); err != nil {
-		log.Error("failed to start command, error: %v", err)
+		s.Logger.Error("failed to start command, error: %v", err)
 		return nil, err
 	}
 
@@ -36,20 +35,20 @@ func (s *SSH) Command(cmd string) (*SSHResult, error) {
 	go func() {
 		pipeRes, err := readFromPipe(stderr)
 		if err != nil {
-			log.Error("read stderr error: %s", err)
+			s.Logger.Error("read stderr error: %s", err)
 		}
 		stderrRes = string(pipeRes)
 		stderrDone <- true
 	}()
 	<-stderrDone
-	
+
 	// Read from stdout
 	stdoutDone := make(chan bool, 1)
 	stdoutRes := ""
 	go func() {
 		pipeRes, err := readFromPipe(stdout)
 		if err != nil {
-			log.Error("read stderr error: %s", err)
+			s.Logger.Error("read stderr error: %s", err)
 		}
 		stdoutRes = string(pipeRes)
 		stdoutDone <- true
@@ -57,7 +56,7 @@ func (s *SSH) Command(cmd string) (*SSHResult, error) {
 	<-stdoutDone
 
 	if err := session.Wait(); err != nil {
-		log.Error("wait error: %s", err)
+		s.Logger.Error("wait error: %s", err)
 	}
 
 	return &SSHResult{

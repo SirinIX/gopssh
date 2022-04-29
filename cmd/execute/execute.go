@@ -21,7 +21,10 @@ var op = &option{}
 var ExecuteCmd = &cobra.Command{
 	Use:     "execute",
 	Short:   "Execute command and return result",
-	Example: "  gopssh execute -c 'ls -l'",
+	Example: `  Simple:                 gopssh execute -c 'ls -l'
+  Specify config:         gopssh execute -c 'ls -l' -f /sample.yaml
+  Select host to execute: gopssh execute -c 'ls -l' -l app=mysql
+  Execute without cache:  gopssh execute -c 'ls -l' -n`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},
@@ -49,6 +52,9 @@ func execute(op *option) error {
 	for _, inst := range instances {
 		done := make(chan bool)
 		go func(instance *cache.Instance) {
+			instance.SSH.Logger = log.NewCtxLogger(map[string]interface{}{
+				"host": instance.SSH.Address.Ip,
+			})
 			res, err := instance.SSH.Command(op.command)
 			if err != nil {
 				return

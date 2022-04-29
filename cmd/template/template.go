@@ -18,7 +18,9 @@ var op = &option{}
 var TemplateCmd = &cobra.Command{
 	Use:     "template",
 	Short:   "Dump config template, yaml or json",
-	Example: "  gopssh template\n  gopssh template -t json",
+	Example: `  Get yaml config template: gopssh template
+  Save template as file:    gopssh template -o sample.yaml
+  Get json config template: gopssh template -t json`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		return execute(op)
 	},
