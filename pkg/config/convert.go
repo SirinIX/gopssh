@@ -36,7 +36,7 @@ func UnmarshalConfig(path string) (*Config, error) {
 }
 
 func UnmarshalYAML(f *os.File) (*Config, error) {
-	conf := &Config{}
+	conf := NewConfig()
 
 	if err := yaml.NewDecoder(f).Decode(conf); err != nil {
 		log.Error("failed to decode yaml file %v, error: %s", f.Name(), err)
@@ -47,7 +47,7 @@ func UnmarshalYAML(f *os.File) (*Config, error) {
 }
 
 func UnmarshalJSON(f *os.File) (*Config, error) {
-	conf := &Config{}
+	conf := NewConfig()
 
 	if err := json.NewDecoder(f).Decode(conf); err != nil {
 		log.Error("failed to decode json file %v, error: %s", f.Name(), err)

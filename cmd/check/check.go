@@ -11,6 +11,7 @@ import (
 
 type option struct {
 	configFile string
+	labels     *[]string
 }
 
 var op = &option{}
@@ -26,6 +27,9 @@ var CheckCmd = &cobra.Command{
 
 func init() {
 	CheckCmd.Flags().StringVarP(&op.configFile, "config-file", "f", "", "config file path")
+	// https://github.com/kubernetes/kubernetes/blob/ea07644522/staging/src/k8s.io/kubectl/pkg/cmd/label/label.go
+	// cmd.Flags().StringVarP(&o.selector, "selector", "l", o.selector, "Selector (label query) to filter on, not including uninitialized ones, supports '=', '==', and '!='.(e.g. -l key1=value1,key2=value2).")
+	op.labels = CheckCmd.Flags().StringArrayP("labels", "l", []string{"all=all"}, "host labels")
 }
 
 func execute(op *option) error {
@@ -45,9 +49,9 @@ func execute(op *option) error {
 			log.Info("succeed to connect %s", inst.SSH.Address.String())
 		}
 	}
-	
-	fmt.Printf("\nSuccess %d IPs: %v\n", len(connected), connected)
-	fmt.Printf("Fail %d IPs: %v\n", len(cantConnected), cantConnected)
+
+	fmt.Printf("\nSucceed to connect %d IPs: %v\n", len(connected), connected)
+	fmt.Printf("Failed  to connect %d IPs: %v\n", len(cantConnected), cantConnected)
 
 	return nil
 }
