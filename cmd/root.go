@@ -6,8 +6,8 @@ import (
 	"gopssh/cmd/check"
 	"gopssh/cmd/convert"
 	"gopssh/cmd/execute"
-	"gopssh/cmd/put"
 	"gopssh/cmd/template"
+	"gopssh/cmd/upload"
 	"gopssh/cmd/version"
 	"gopssh/log"
 
@@ -25,11 +25,11 @@ const (
 )
 
 var rootCmd = &cobra.Command{
-	Use:  "root",
+	Use:   "root",
 	Short: "A high-performance and user friendly ssh tool",
 	// Version: "0.0.1",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Print("Welcome to gopssh!"+logo+"\nPlease type `gopssh --help` to see the usage")
+		fmt.Print("Welcome to gopssh!" + logo + "\nPlease type `gopssh --help` to see the usage")
 	},
 }
 
@@ -41,8 +41,8 @@ func init() {
 		check.CheckCmd,
 		convert.ConvertCmd,
 		execute.ExecuteCmd,
-		put.PutCmd,
 		template.TemplateCmd,
+		upload.UploadCmd,
 		version.VersionCmd,
 	)
 }

@@ -31,11 +31,12 @@ var ExecuteCmd = &cobra.Command{
 }
 
 func init() {
-	ExecuteCmd.Flags().StringVarP(&op.command, "command", "c", "", "command to execute")
 	ExecuteCmd.Flags().StringVarP(&op.configFile, "config-file", "f", "", "config file path")
 	ExecuteCmd.Flags().BoolVarP(&op.withoutCache, "without-cache", "n", false, "not use cache, default use cache")
-	ExecuteCmd.Flags().StringVarP(&op.labels, "labels", "l", "", "label to filter on, supports '=', and '!=' (e.g. -l key1=value1,key2!=value2")
-
+	ExecuteCmd.Flags().StringVarP(&op.labels, "labels", "l", "", "label to filter on, default select all host, supports '=', and '!=' (e.g. -l key1=value1,key2!=value2")
+	
+	ExecuteCmd.Flags().StringVarP(&op.command, "command", "c", "", "command to execute")
+	
 	ExecuteCmd.MarkFlagRequired("command")
 }
 

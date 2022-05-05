@@ -29,9 +29,9 @@ var ConvertCmd = &cobra.Command{
 }
 
 func init() {
-	ConvertCmd.Flags().StringVarP(&op.outputPath, "output-path", "o", "", "output file path")
 	ConvertCmd.Flags().StringVarP(&op.yamlPath, "yaml-path", "y", "", "yaml file path")
 	ConvertCmd.Flags().StringVarP(&op.jsonPath, "json-path", "j", "", "json file path")
+	ConvertCmd.Flags().StringVarP(&op.outputPath, "output-path", "o", "", "output file path")
 }
 
 func execute(op *option) error {
