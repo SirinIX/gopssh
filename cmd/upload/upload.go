@@ -1,6 +1,13 @@
 package upload
 
-import "github.com/spf13/cobra"
+import (
+	"gopssh/log"
+	"gopssh/pkg/cache"
+	"gopssh/pkg/config"
+	"gopssh/pkg/label"
+
+	"github.com/spf13/cobra"
+)
 
 type option struct {
 	configFile   string
@@ -14,8 +21,8 @@ type option struct {
 var op = &option{}
 
 var UploadCmd = &cobra.Command{
-	Use:     "upload",
-	Short:   "Upload file to remote",
+	Use:   "upload",
+	Short: "Upload file to remote",
 	Example: ` Simple:                 gopssh upload -i sample.txt -o /tmp/upload.txt
   Specify config:         gopssh execute -i sample.txt -o /tmp/upload.txt -f /sample.yaml
   Select host to execute: gopssh execute -i sample.txt -o /tmp/upload.txt -l app=mysql
@@ -38,5 +45,32 @@ func init() {
 }
 
 func execute(op *option) error {
+	instances, err := config.ConfigFileToInstances(op.configFile, op.withoutCache)
+	if err != nil {
+		return err
+	}
+	instances, err = label.SelectInstances(op.labels, instances)
+	if err != nil {
+		return err
+	}
+
+	done := make(chan bool, len(instances))
+	for _, inst := range instances {
+		go func(instance *cache.Instance) {
+			instance.SSH.Logger = log.NewCtxLogger(map[string]interface{}{
+				"host": instance.SSH.Address.Ip,
+			})
+			if err := instance.SSH.CopyFile(op.uploadFile, op.outputPath); err != nil {
+				done <- false
+				return
+			}
+			done <- true
+		}(inst)
+	}
+
+	for i := 0; i < cap(done); i++ {
+		<-done
+	}
+
 	return nil
 }
