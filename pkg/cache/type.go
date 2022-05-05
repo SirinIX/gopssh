@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"gopssh/pkg/base64"
 	"gopssh/pkg/file"
 	"gopssh/pkg/rand"
 	"gopssh/pkg/ssh"
@@ -102,4 +103,27 @@ func (i *Instance) HasLabels(labels map[string]string) bool {
 	}
 
 	return true
+}
+
+func (i *Instance) String() string {
+	return fmt.Sprintf("Ip: %s, Port: %d, Username: %s, Password: %s, Labels: %v", i.SSH.Address.Ip, i.SSH.Address.Port, i.SSH.Username, i.SSH.Password, PrettyMap(i.Labels))
+}
+
+func (i *Instance) StringDecodePassword() (string, error) {
+	pwd := i.SSH.Password
+	decPwd, err := base64.Decode(pwd)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("Ip: %s, Port: %d, Username: %s, Password: %s, Labels: %#v", i.SSH.Address.Ip, i.SSH.Address.Port, i.SSH.Username, decPwd, PrettyMap(i.Labels)), nil
+}
+
+func PrettyMap(input map[string]string) string {
+	output := "{ "
+	for k, v := range input {
+		output += fmt.Sprintf("%s: %s, ", k, v)
+	}
+
+	return output[:len(output)-2] + " }"
 }

@@ -6,6 +6,7 @@ import (
 	"gopssh/cmd/check"
 	"gopssh/cmd/convert"
 	"gopssh/cmd/execute"
+	"gopssh/cmd/get"
 	"gopssh/cmd/template"
 	"gopssh/cmd/upload"
 	"gopssh/cmd/version"
@@ -41,6 +42,7 @@ func init() {
 		check.CheckCmd,
 		convert.ConvertCmd,
 		execute.ExecuteCmd,
+		get.GetCmd,
 		template.TemplateCmd,
 		upload.UploadCmd,
 		version.VersionCmd,
