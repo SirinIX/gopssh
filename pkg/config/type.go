@@ -20,9 +20,9 @@ type Config struct {
 }
 
 type Global struct {
-	Port     int               `json:"port" yaml:"port"`
-	Username string            `json:"username" yaml:"username"`
-	Password string            `json:"password" yaml:"password"`
+	Port     int    `json:"port" yaml:"port"`
+	Username string `json:"username" yaml:"username"`
+	Password string `json:"password" yaml:"password"`
 	// Labels   map[string]string `json:"labels" yaml:"labels"`
 }
 
@@ -91,7 +91,7 @@ func ConfigFileToInstances(path string, withoutCache bool) (cache.Instances, err
 	}
 
 	// Ignore cache error
-	SaveNewCache(cfgPath, instances)
+	_ = SaveNewCache(cfgPath, instances)
 
 	return instances, nil
 }

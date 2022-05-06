@@ -28,7 +28,7 @@ func init() {
 	Base64Cmd.Flags().BoolVarP(&op.decode, "decode", "d", false, "decode or encode, default is encode")
 	Base64Cmd.Flags().StringVarP(&op.content, "content", "c", "", "decode / encode data content (required)")
 
-	Base64Cmd.MarkFlagRequired("content")
+	_ = Base64Cmd.MarkFlagRequired("content")
 }
 
 func execute(op *option) error {

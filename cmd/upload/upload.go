@@ -40,8 +40,8 @@ func init() {
 	UploadCmd.Flags().StringVarP(&op.uploadFile, "upload-file", "i", "", "the file to upload")
 	UploadCmd.Flags().StringVarP(&op.outputPath, "output-path", "o", "", "upload file download path")
 
-	UploadCmd.MarkFlagRequired("upload-file")
-	UploadCmd.MarkFlagRequired("output-path")
+	_ = UploadCmd.MarkFlagRequired("upload-file")
+	_ = UploadCmd.MarkFlagRequired("output-path")
 }
 
 func execute(op *option) error {

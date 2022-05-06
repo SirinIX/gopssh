@@ -37,7 +37,7 @@ func init() {
 
 	ExecuteCmd.Flags().StringVarP(&op.command, "command", "c", "", "command to execute")
 
-	ExecuteCmd.MarkFlagRequired("command")
+	_ = ExecuteCmd.MarkFlagRequired("command")
 }
 
 func execute(op *option) error {
